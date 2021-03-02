@@ -25,7 +25,6 @@
                     <DataTemplate>
                         <Grid>
                             <TextBlock Text="{Binding LocalizedName}"/>
-                            <TextBlock Text="222"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -14,8 +14,8 @@ namespace WheatherApiApp.ViewModel.Helpers
         //locations/v1/cities/autocomplete?apikey=FbSDLkGxYlf60mXlZBTXMcnQGUkbTqHg&q=Eski%C5%9F
         //FbSDLkGxYlf60mXlZBTXMcnQGUkbTqHg
         public const string BASE_URL = "http://dataservice.accuweather.com/";
-        public const string AUTOCOMPLATE_ENDPOINT = "locations/v1/cities/autocomplete?apikey={0}&q={1}";
-        public const string CURRENT_CONDITIONS_ENDPOINT = "currentconditions/v1/{0}/?apikey={1}";
+        public const string AUTOCOMPLATE_ENDPOINT = "locations/v1/cities/autocomplete?apikey={0}&q={1}&language=tr-tr";
+        public const string CURRENT_CONDITIONS_ENDPOINT = "currentconditions/v1/{0}/?apikey={1}&language=tr-tr";
         public const string API_KEY = "FbSDLkGxYlf60mXlZBTXMcnQGUkbTqHg";
 
         public static async Task<List<City>> GetCities(string query)

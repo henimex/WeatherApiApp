@@ -15,36 +15,6 @@ namespace WheatherApiApp.ViewModel
 {
     public class WeatherVM : INotifyPropertyChanged
     {
-
-        public SearchCommand SearchCommand { get; set; }
-
-        public ObservableCollection<City> Cities { get; set; }
-
-        public WeatherVM()
-        {
-            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
-            {
-                SelectedCity = new City()
-                {
-                    LocalizedName = "Eskişehir"
-                };
-                CurrentConditions = new CurrentConditions()
-                {
-                    WeatherText = "Cloudy",
-                    Temperature = new Temperature()
-                    {
-                        Metric = new Units()
-                        {
-                            Value = 21
-                        }
-                    }
-                };
-            }
-
-            SearchCommand = new SearchCommand(this);
-            Cities = new ObservableCollection<City>();
-        }
-        
         private string query;
 
         public string Query
@@ -56,6 +26,8 @@ namespace WheatherApiApp.ViewModel
                 OnPropertyChanged("Query");
             }
         }
+        
+        public ObservableCollection<City> Cities { get; set; }
 
         private CurrentConditions currentConditions;
 
@@ -77,10 +49,41 @@ namespace WheatherApiApp.ViewModel
             set
             {
                 selectedCity = value;
-                OnPropertyChanged("SelectedCity");
+                if (selectedCity!=null)
+                {
+                    OnPropertyChanged("SelectedCity");
+                    GetCurrentConditions();
+                }
             }
         }
 
+        public SearchCommand SearchCommand { get; set; }
+
+        public WeatherVM()
+        {
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                SelectedCity = new City
+                {
+                    LocalizedName = "Eskişehir"
+                };
+                CurrentConditions = new CurrentConditions()
+                {
+                    WeatherText = "Cloudy",
+                    Temperature = new Temperature()
+                    {
+                        Metric = new Units()
+                        {
+                            Value = "21"
+                        }
+                    }
+                };
+            }
+
+            SearchCommand = new SearchCommand(this);
+            Cities = new ObservableCollection<City>();
+        }
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
@@ -92,10 +95,18 @@ namespace WheatherApiApp.ViewModel
         {
             var cities = await AcuWeatherHelper.GetCities(Query);
             Cities.Clear();
-            foreach (var city in Cities)
+            foreach (var city in cities)
             {
                 Cities.Add(city);
             }
+        }
+
+        private async void GetCurrentConditions()
+        {
+            Query = string.Empty;
+            CurrentConditions = await AcuWeatherHelper.GetCurrentConditions(selectedCity.Key);
+            Cities.Clear();
+
         }
 
         //protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
